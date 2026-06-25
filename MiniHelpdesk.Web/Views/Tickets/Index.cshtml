@@ -1,0 +1,46 @@
+@model IEnumerable<MiniHelpdesk.Web.Models.Ticket>
+@{
+    ViewData["Title"] = "Zgłoszenia";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Lista zgłoszeń</h1>
+    <a asp-action="Create" class="btn btn-primary">Nowe zgłoszenie</a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Brak zgłoszeń.</div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Tytuł</th>
+                <th>Status</th>
+                <th>Data utworzenia</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>@ticket.Id</td>
+                    <td>@ticket.Title</td>
+                    <td>
+                        <span class="badge @(ticket.Status == MiniHelpdesk.Web.Models.TicketStatus.Open ? "bg-success" : "bg-secondary")">
+                            @(ticket.Status == MiniHelpdesk.Web.Models.TicketStatus.Open ? "Otwarte" : "Zamknięte")
+                        </span>
+                    </td>
+                    <td>@ticket.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@ticket.Id" class="btn btn-sm btn-outline-primary">Szczegóły</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

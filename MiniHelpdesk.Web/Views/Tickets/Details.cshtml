@@ -1,0 +1,53 @@
+@model MiniHelpdesk.Web.ViewModels.TicketDetailsViewModel
+@{
+    ViewData["Title"] = $"Zgłoszenie #{Model.Ticket.Id}";
+    var isClosed = Model.Ticket.Status == MiniHelpdesk.Web.Models.TicketStatus.Closed;
+}
+
+<div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+        <h1>@Model.Ticket.Title</h1>
+        <small class="text-muted">Utworzono: @Model.Ticket.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+    </div>
+    <span class="badge fs-6 @(isClosed ? "bg-secondary" : "bg-success")">
+        @(isClosed ? "Zamknięte" : "Otwarte")
+    </span>
+</div>
+
+@if (!string.IsNullOrWhiteSpace(Model.Ticket.Description))
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="mb-0">@Model.Ticket.Description</p>
+        </div>
+    </div>
+}
+
+<h4 class="mb-3">Komentarze (@Model.Comments.Count())</h4>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="card mb-2">
+        <div class="card-body">
+            <div class="d-flex justify-content-between mb-1">
+                <strong>@comment.Author</strong>
+                <small class="text-muted">@comment.CreatedAt.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</small>
+            </div>
+            <p class="mb-0">@comment.Content</p>
+        </div>
+    </div>
+}
+
+<div class="mt-4 d-flex gap-2">
+    <a asp-action="Index" class="btn btn-outline-secondary">Powrót do listy</a>
+
+    @if (!isClosed)
+    {
+        <form asp-action="Close" asp-route-id="@Model.Ticket.Id" method="post">
+            <button type="submit" class="btn btn-warning"
+                    onclick="return confirm('Zamknąć to zgłoszenie?')">
+                Zamknij zgłoszenie
+            </button>
+        </form>
+    }
+</div>

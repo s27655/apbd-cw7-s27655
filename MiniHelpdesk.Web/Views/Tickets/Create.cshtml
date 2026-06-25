@@ -1,0 +1,56 @@
+@model MiniHelpdesk.Web.ViewModels.CreateTicketViewModel
+@{
+    ViewData["Title"] = "Nowe zgłoszenie";
+}
+
+<h1>Nowe zgłoszenie</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+            <fieldset>
+                <legend class="mb-3 fw-semibold">Zgłoszenie</legend>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label">Tytuł *</label>
+                    <input asp-for="Title" class="form-control" placeholder="Krótki opis problemu" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label">Opis</label>
+                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Szczegółowy opis (opcjonalnie)"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </fieldset>
+
+            <fieldset class="mt-4">
+                <legend class="mb-3 fw-semibold">Pierwszy komentarz</legend>
+
+                <div class="mb-3">
+                    <label asp-for="FirstCommentAuthor" class="form-label">Autor *</label>
+                    <input asp-for="FirstCommentAuthor" class="form-control" placeholder="Twoje imię lub nick" />
+                    <span asp-validation-for="FirstCommentAuthor" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FirstCommentContent" class="form-label">Treść *</label>
+                    <textarea asp-for="FirstCommentContent" class="form-control" rows="4" placeholder="Opisz problem szczegółowo..."></textarea>
+                    <span asp-validation-for="FirstCommentContent" class="text-danger"></span>
+                </div>
+            </fieldset>
+
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary">Utwórz zgłoszenie</button>
+                <a asp-action="Index" class="btn btn-outline-secondary ms-2">Anuluj</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
